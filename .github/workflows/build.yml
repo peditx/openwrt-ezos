@@ -22,12 +22,12 @@ jobs:
           gzip -dk sdb1.img.gz sdb2.img.gz sdb3.img.gz
 
       - name: Create empty full image file
-        run: dd if=/dev/zero of=full_image.img bs=1M count=2000
+        run: dd if=/dev/zero of=PeDitXEZOs.img bs=1M count=2000
 
       - name: Setup loop device with partitions
         id: losetup
         run: |
-          LOOP_DEV=$(sudo losetup --find --show --partscan full_image.img)
+          LOOP_DEV=$(sudo losetup --find --show --partscan PeDitXEZOs.img)
           echo "loopdev=$LOOP_DEV" >> $GITHUB_OUTPUT
 
       - name: Apply partition table to loop device
@@ -43,11 +43,11 @@ jobs:
         run: sudo losetup -d ${{ steps.losetup.outputs.loopdev }}
 
       - name: Compress final image
-        run: gzip -k full_image.img
+        run: gzip -k PeDitXEZOs.img
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v1
         with:
-          files: full_image.img.gz
+          files: PeDitXEZOs.img.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
