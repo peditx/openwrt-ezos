@@ -1,36 +1,53 @@
-name: Build Full Image
+name: Build and Release Live USB Image
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Merge sdb2.img.gz parts
-        run: |
-          if ls sdb2.img.gz.part-* 1> /dev/null 2>&1; then
-            cat sdb2.img.gz.part-* > sdb2.img.gz
-          fi
+      - name: Install required tools
+        run: sudo apt-get update && sudo apt-get install -y sfdisk losetup gzip
 
-      - name: Decompress all img.gz files
+      - name: Concat sdb2 parts and extract all imgs
         run: |
-          for i in 1 2 3; do
-            if [ -f "sdb${i}.img.gz" ]; then
-              gunzip -kf sdb${i}.img.gz
-            fi
-          done
+          cat sdb2.img.gz.part-* > sdb2.img.gz
+          gzip -dk sdb1.img.gz sdb2.img.gz sdb3.img.gz
 
-      - name: Concatenate all .img files
+      - name: Create empty full image file
+        run: dd if=/dev/zero of=full_image.img bs=1M count=2000
+
+      - name: Setup loop device with partitions
+        id: losetup
         run: |
-          cat sdb1.img sdb2.img sdb3.img > full_image.img
+          LOOP_DEV=$(sudo losetup --find --show --partscan full_image.img)
+          echo "loopdev=$LOOP_DEV" >> $GITHUB_OUTPUT
 
-      - name: Upload full_image.img to Release
-        uses: softprops/action-gh-release@v2
+      - name: Apply partition table to loop device
+        run: sudo sfdisk ${{ steps.losetup.outputs.loopdev }} < partition-table.txt
+
+      - name: Write partitions into image loop device
+        run: |
+          sudo dd if=sdb1.img of=${{ steps.losetup.outputs.loopdev }}p1 bs=1M status=progress
+          sudo dd if=sdb2.img of=${{ steps.losetup.outputs.loopdev }}p2 bs=1M status=progress
+          sudo dd if=sdb3.img of=${{ steps.losetup.outputs.loopdev }}p3 bs=1M status=progress
+
+      - name: Detach loop device
+        run: sudo losetup -d ${{ steps.losetup.outputs.loopdev }}
+
+      - name: Compress final image
+        run: gzip -k full_image.img
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v1
         with:
-          files: full_image.img
+          files: full_image.img.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
