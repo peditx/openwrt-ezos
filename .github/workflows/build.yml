@@ -1,0 +1,36 @@
+name: Build Full Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Merge sdb2.img.gz parts
+        run: |
+          if ls sdb2.img.gz.part-* 1> /dev/null 2>&1; then
+            cat sdb2.img.gz.part-* > sdb2.img.gz
+          fi
+
+      - name: Decompress all img.gz files
+        run: |
+          for i in 1 2 3; do
+            if [ -f "sdb${i}.img.gz" ]; then
+              gunzip -kf sdb${i}.img.gz
+            fi
+          done
+
+      - name: Concatenate all .img files
+        run: |
+          cat sdb1.img sdb2.img sdb3.img > full_image.img
+
+      - name: Upload full_image.img to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: full_image.img
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
