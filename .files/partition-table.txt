@@ -1,0 +1,11 @@
+Model:  USB DISK 2.0 (scsi)
+Disk /dev/sdb: 62.0GB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name  Flags
+ 3      17.4kB  1049kB  1031kB                     bios_grub
+ 1      1049kB  17.8MB  16.8MB  fat16              legacy_boot
+ 2      17.8MB  1071MB  1053MB
+
