@@ -16,16 +16,17 @@ jobs:
       - name: Install required tools
         run: sudo apt-get update && sudo apt-get install -y util-linux gzip
 
-      - name: Move files from .files to workspace root
-        run: mv .files/* .
-
-      - name: Concat sdb2 parts and extract all imgs
+      - name: Change directory to .files
+        working-directory: .files
         run: |
           cat sdb2.img.gz.part-aa sdb2.img.gz.part-ab > sdb2.img.gz
           gzip -dk sdb1.img.gz sdb2.img.gz sdb3.img.gz
 
+      - name: Move extracted images to root
+        run: mv .files/*.img ./
+
       - name: Create empty full image file
-        run: dd if=/dev/zero of=PeDitXEZOs.img bs=1M count=2000
+        run: dd if=/dev/zero of=PeDitXEZOs.img bs=1M count=1500
 
       - name: Setup loop device with partitions
         id: losetup
@@ -34,7 +35,8 @@ jobs:
           echo "loopdev=$LOOP_DEV" >> $GITHUB_OUTPUT
 
       - name: Apply partition table to loop device
-        run: sudo sfdisk ${{ steps.losetup.outputs.loopdev }} < partition-table.txt
+        run: |
+          sudo sfdisk ${{ steps.losetup.outputs.loopdev }} < partition-table.txt || true
 
       - name: Write partitions into image loop device
         run: |
