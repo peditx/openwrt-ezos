@@ -12,6 +12,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      
+      - name: Create Git tag
+        run: |
+          TAG="v$(date +'%Y%m%d%H%M%S')"
+          git tag $TAG
+          git push origin $TAG
 
       - name: Install required tools
         run: sudo apt-get update && sudo apt-get install -y util-linux gzip
