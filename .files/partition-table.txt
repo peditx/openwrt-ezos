@@ -1,11 +1,8 @@
-Model:  USB DISK 2.0 (scsi)
-Disk /dev/sdb: 62.0GB
-Sector size (logical/physical): 512B/512B
-Partition Table: gpt
-Disk Flags: 
+label: gpt
+label-id: 12345678-9abc-def0-1234-56789abcdef0
+device: PeDitXEZOs.img
+unit: sectors
 
-Number  Start   End     Size    File system  Name  Flags
- 3      17.4kB  1049kB  1031kB                     bios_grub
- 1      1049kB  17.8MB  16.8MB  fat16              legacy_boot
- 2      17.8MB  1071MB  1053MB
-
+PeDitXEZOs.img3 : start=34, size=2014, type=ef02, name="bios_grub"
+PeDitXEZOs.img1 : start=2048, size=32768, type=ef00, name="legacy_boot"
+PeDitXEZOs.img2 : start=34816, size=2097152, type=8300
