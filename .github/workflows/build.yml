@@ -52,11 +52,11 @@ jobs:
         run: gzip -k PeDitXEZOs.img
 
       - name: Upload release asset
-        #uses: softprops/action-gh-release@v1
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
+        #uses: ncipollo/release-action@v1
         with:
-          tag: main
-          name: Release for main branch
+          tag: v1.0.1
+          #name: Release for main branch
           files: PeDitXEZOs.img.gz
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
