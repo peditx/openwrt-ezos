@@ -16,6 +16,9 @@ jobs:
       - name: Install required tools
         run: sudo apt-get update && sudo apt-get install -y util-linux gzip
 
+      - name: Move files from .files to workspace root
+        run: mv .files/* .
+
       - name: Concat sdb2 parts and extract all imgs
         run: |
           cat sdb2.img.gz.part-aa sdb2.img.gz.part-ab > sdb2.img.gz
