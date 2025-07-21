@@ -18,7 +18,7 @@ jobs:
 
       - name: Concat sdb2 parts and extract all imgs
         run: |
-          cat sdb2.img.gz.part-* > sdb2.img.gz
+          cat sdb2.img.gz.part-aa sdb2.img.gz.part-ab > sdb2.img.gz
           gzip -dk sdb1.img.gz sdb2.img.gz sdb3.img.gz
 
       - name: Create empty full image file
