@@ -3,7 +3,7 @@ name: Build and Release Live USB Image
 on:
   push:
     tags:
-      - 'v*'
+      - main
   workflow_dispatch:
 
 jobs:
