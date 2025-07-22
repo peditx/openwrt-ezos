@@ -28,3 +28,6 @@ chmod +x ./dns.sh ./install.sh ./network.sh ./setup.sh
 # جایگزینی کامل rc.local با نسخه موجود در ریشه گیت‌هاب
 cp ./rc.local package/base-files/files/etc/rc.local
 chmod +x package/base-files/files/etc/rc.local
+
+# جایگزینی فایل banner
+cp ./banner package/base-files/files/etc/banner
