@@ -16,3 +16,5 @@
 # Add a feed source
 # echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 echo 'src-git passwall2 https://github.com/peditx/openwrt-passwall2' >>feeds.conf.default
+echo 'src-git carbonpx https://github.com/peditx/luci-theme-carbonpx' >>feeds.conf.default
+echo 'src-git peditx https://github.com/peditx/luci-theme-peditx' >>feeds.conf.default
