@@ -1,20 +1,30 @@
 #!/bin/bash
-#
-# https://github.com/P3TERX/Actions-OpenWrt
-# File name: diy-part2.sh
-# Description: OpenWrt DIY script part 2 (After Update feeds)
-#
-# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
-#
-# This is free software, licensed under the MIT License.
-# See /LICENSE for more information.
-#
+# OpenWrt DIY script part 2 (After Update feeds)
 
-# Modify default IP
-#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
+# تغییر IP پیش‌فرض
+sed -i 's/192.168.1.1/10.1.1.1/g' package/base-files/files/bin/config_generate
 
-# Modify default theme
-#sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+# تغییر hostname پیش‌فرض
+sed -i 's/OpenWrt/PeDitXOs/g' package/base-files/files/bin/config_generate
 
-# Modify hostname
-#sed -i 's/OpenWrt/P3TERX-Router/g' package/base-files/files/bin/config_generate
+# جایگزینی فایل profile
+cp ./profile package/base-files/files/etc/profile
+
+# جایگزینی فایل‌ها در /etc/profile.d/
+cp ./30-sysinfo.sh package/base-files/files/etc/profile.d/30-sysinfo.sh
+cp ./sys_bashrc.sh package/base-files/files/etc/profile.d/sys_bashrc.sh
+
+chmod +x package/base-files/files/etc/profile.d/30-sysinfo.sh
+chmod +x package/base-files/files/etc/profile.d/sys_bashrc.sh
+
+# کپی فایل‌ها از فولدر .files به روت openwrt
+cp ./.files/dns.sh ./
+cp ./.files/install.sh ./
+cp ./.files/network.sh ./
+cp ./.files/setup.sh ./
+
+chmod +x ./dns.sh ./install.sh ./network.sh ./setup.sh
+
+# جایگزینی کامل rc.local با نسخه موجود در ریشه گیت‌هاب
+cp ./rc.local package/base-files/files/etc/rc.local
+chmod +x package/base-files/files/etc/rc.local
