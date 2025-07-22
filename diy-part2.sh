@@ -37,7 +37,7 @@ chmod +x ./dns.sh ./install.sh ./network.sh ./setup.sh
 rm -rf feeds/luci/themes/luci-theme-bootstrap
 
 # کلون تم luci-theme-carbonpx (در صورت نیاز، آدرس درست بده)
-git clone https://github.com/kenzok8/luci-theme-carbon.git package/luci-theme-carbonpx
+git clone https://github.com/peditx/luci-theme-carbonpx.git package/luci-theme-carbonpx
 
 # تغییر تم پیش‌فرض به carbonpx
 sed -i 's/luci-theme-bootstrap/luci-theme-carbonpx/g' feeds/luci/collections/luci/Makefile
